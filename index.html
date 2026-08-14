@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow — Organize your day. Get things done.</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="TaskFlow is a modern, responsive, client-side To-Do list dashboard built with clean HTML, CSS, and Vanilla JavaScript. Track stats, filter states, edit inline, and persist tasks in LocalStorage.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background elements -->
+  <div class="app-bg-glow shadow-glow-1"></div>
+  <div class="app-bg-glow shadow-glow-2"></div>
+
+  <main class="app-container">
+    <!-- Header: Brand & Stats Dashboard -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5C15 6.10457 14.1046 7 13 7H11C9.89543 7 9 6.10457 9 5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>TaskFlow</h1>
+          <p class="subtitle">Organize your day. Get things done.</p>
+        </div>
+      </div>
+      
+      <section class="stats-dashboard" aria-label="Task Statistics">
+        <div class="stat-item" id="stat-total-wrapper">
+          <span class="stat-value" id="stat-total">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-divider" role="presentation"></div>
+        <div class="stat-item" id="stat-active-wrapper">
+          <span class="stat-value" id="stat-active">0</span>
+          <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-divider" role="presentation"></div>
+        <div class="stat-item" id="stat-completed-wrapper">
+          <span class="stat-value" id="stat-completed">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+      </section>
+    </header>
+
+    <!-- Task Input Form -->
+    <section class="input-section" aria-label="Create Task">
+      <form id="add-task-form" class="add-task-form">
+        <div class="input-wrapper">
+          <input type="text" id="task-input" placeholder="What needs to be done?" aria-label="Task content input field" required autocomplete="off">
+        </div>
+        <button type="submit" class="btn-add" id="btn-add-task" aria-label="Add new task">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Add Task</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Filters navigation -->
+    <section class="filter-section" aria-label="Filter tasks">
+      <nav class="filter-nav" id="filter-nav">
+        <button class="filter-btn active" data-filter="all" id="filter-btn-all" aria-label="Show all tasks">
+          All <span class="filter-count" id="count-all">0</span>
+        </button>
+        <button class="filter-btn" data-filter="active" id="filter-btn-active" aria-label="Show active tasks">
+          Active <span class="filter-count" id="count-active">0</span>
+        </button>
+        <button class="filter-btn" data-filter="completed" id="filter-btn-completed" aria-label="Show completed tasks">
+          Completed <span class="filter-count" id="count-completed">0</span>
+        </button>
+      </nav>
+    </section>
+
+    <!-- Tasks List Container -->
+    <section class="list-section" aria-label="Task list container">
+      <ul class="task-list" id="task-list" aria-label="Tasks list">
+        <!-- Javascript renders tasks list elements here dynamically -->
+      </ul>
+      <div id="empty-state" class="empty-state hidden" aria-live="polite">
+        <!-- Javascript renders empty state dynamically -->
+      </div>
+    </section>
+
+    <!-- Footer Actions (Clear Completed Button) -->
+    <footer class="app-footer" id="app-footer">
+      <button id="clear-completed-btn" class="btn-clear hidden" aria-label="Clear all completed tasks">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M19 7L18.1327 19.1422C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1422L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Clear Completed</span>
+      </button>
+    </footer>
+  </main>
+
+  <!-- Clear Completed Confirmation Modal Dialog -->
+  <div id="confirm-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-describedby="modal-description" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-icon" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 7L18.1327 19.1422C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1422L5 7M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 11V17M9 14H15" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 id="modal-title">Clear Completed Tasks?</h2>
+      <p id="modal-description">This will permanently delete all completed tasks. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button id="modal-cancel-btn" class="btn-modal btn-modal-secondary">Cancel</button>
+        <button id="modal-confirm-btn" class="btn-modal btn-modal-danger">Yes, Clear Them</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
